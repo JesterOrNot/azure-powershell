@@ -1,4 +1,4 @@
-FROM gitpod/workspace-full AS installer-env
+FROM debian:buster-slim AS installer-env
 USER gitpod
 ARG PS_VERSION=6.1.0
 ARG PS_PACKAGE=powershell-${PS_VERSION}-linux-x64.tar.gz
@@ -8,7 +8,7 @@ ADD ${PS_PACKAGE_URL} /tmp/linux.tar.gz
 ENV PS_INSTALL_FOLDER=/opt/microsoft/powershell/$PS_INSTALL_VERSION
 RUN mkdir -p ${PS_INSTALL_FOLDER}
 RUN tar zxf /tmp/linux.tar.gz -C ${PS_INSTALL_FOLDER}
-FROM ${imageRepo}:${fromTag}
+FROM gitpod/workspace-full:latest
 ARG PS_VERSION=6.2.0-preview.3
 ARG PS_INSTALL_VERSION=7-preview
 COPY --from=installer-env ["/opt/microsoft/powershell", "/opt/microsoft/powershell"]
